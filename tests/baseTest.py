@@ -18,12 +18,15 @@ class BaseTest(unittest.TestCase, Logger):
     def setUp(self):
         self.testResult = False
         whoami()
+        DriverCommands(self.driver).open_url(self.CONFIG['BASE_URL'])
 
     def tearDown(self):
         whoami()
         if not self.testResult:
-            name = self.__class__.id(self).split('.')[3]
+            name = self.__class__.id(self).split('.')[2]
             DriverCommands(self.driver).get_screenshot_file(self.driver, name)
+        DriverCommands(self.driver).open_url(self.CONFIG['BASE_URL'] + '/Logout')
+
 
     @classmethod
     def tearDownClass(cls):

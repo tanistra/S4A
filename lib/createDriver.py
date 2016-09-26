@@ -24,9 +24,7 @@ def create_driver(browser=CONFIG["BROWSER"]):
     if browser.upper() == "FF":
         d = DesiredCapabilities.FIREFOX
         d['loggingPrefs'] = {'browser': 'ALL'}
-        fp = webdriver.FirefoxProfile()
-        fp.set_preference('webdriver.log.file', '/tmp/firefox_console')
-        driver = webdriver.Firefox(capabilities=d, firefox_profile=fp)
+        driver = webdriver.Firefox(capabilities=d)
         driver.maximize_window()
     elif browser.upper() == "CHROME":
         d = DesiredCapabilities.CHROME
@@ -44,10 +42,10 @@ def create_driver(browser=CONFIG["BROWSER"]):
     elif browser.upper() == "SAFARI":
         driver = webdriver.Safari()
     else:
-        assert False, """
+        raise Exception("""
         ERROR! Please check browser in config.json file. BROWSER should = 'FF',
         'CHROME', 'OPERA' 'IE', 'EDGE' or 'SAFARI'
-        """
+        """)
     driver.implicitly_wait(15)
     log.logger('INFO', '%s selenium driver started' % browser)
     return driver

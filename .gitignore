@@ -62,6 +62,8 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+nosetest.html
+nosetests.html
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

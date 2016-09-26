@@ -1,9 +1,12 @@
 import os
 import json
-from lib.randomDataGenerator import FileManager
 
 CONFIG_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'configuration')
-fileManager = FileManager()
+
+
+def check_if_config_exists(file_path):
+    if not os.path.isfile(file_path):
+        raise FileNotFoundError("Configuration file not found!\n%s" % file_path)
 
 
 def load_configuration_from_file(file_name):
@@ -12,7 +15,7 @@ def load_configuration_from_file(file_name):
         :return: data from json file in object.attribute format
     """
     file_path = os.path.join(CONFIG_PATH, file_name)
-    fileManager.check_if_file_exists(file_path)
+    check_if_config_exists(file_path)
     with open(file_path, 'r') as config_file:
         config = json.load(config_file)
     return config

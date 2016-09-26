@@ -1,10 +1,10 @@
 import os
 import time
 
-from selenium.common.exceptions import TimeoutException, NoSuchElementException, StaleElementReferenceException, \
-    NoSuchWindowException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException, NoSuchWindowException
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait, Select
+from selenium.webdriver.common.action_chains import ActionChains
 from lib.logger import Logger
 from .configurationReader import load_configuration_from_file
 
@@ -12,6 +12,7 @@ CONFIG = load_configuration_from_file('config.json')
 
 
 class DriverCommands:
+
     def __init__(self, driver):
         self.driver = driver
         self.wait_time = 5
@@ -24,13 +25,7 @@ class DriverCommands:
             :param selector: tuple (eg. By.ID, 'element/id')
             :return: elements handler
         """
-        if len(self.find_elements(selector)) == 0:
-            raise AssertionError('Could not locate elements by parameters: %s' % str(selector))
-        try:
-            element = self.driver.find_element(*selector)
-        except StaleElementReferenceException:
-            self.log.logger('WARNING', 'DOM Exception')
-            element = self.driver.find_element(*selector)
+        element = self.driver.find_element(*selector)
         return element
 
     def find_elements(self, selector):
@@ -41,17 +36,18 @@ class DriverCommands:
         elements = self.driver.find_elements(*selector)
         return elements
 
-    def scroll_to_bottom(self):
-        """scroll to the end of page"""
-        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-
     def click_element(self, selector):
         """Find element and click on it.
 
             :param selector: tuple (eg. By.ID, 'element/id')
         """
-        element = self.wait_from_element_clickable(selector, 2)
+        element = self.wait_for_element_to_be_clickable(selector, 2)
         element.click()
+
+    def select_dd_element(self, selector, option_name):
+        element = self.find_element(selector)
+        select = Select(element)
+        select.select_by_visible_text(option_name)
 
     def fill_in(self, selector, value, confirm=False):
         """Find element and enter text to the field
@@ -65,6 +61,10 @@ class DriverCommands:
         element.send_keys(value)
         if confirm:
             element.submit()
+
+    def move_to_element(self, selector):
+        element = self.find_element(selector)
+        ActionChains(self.driver).move_to_element(element).perform()
 
     def check_page_title(self, expected_title, wait=5):
         """Wait some time until title will be equal to expected
@@ -128,6 +128,13 @@ class DriverCommands:
 
     # WAIT METHODS
 
+    def wait_for_element_to_be_clickable(self, selector, wait=None):
+        wait = wait or self.wait_time
+        try:
+            return WebDriverWait(self.driver, wait).until(EC.element_to_be_clickable(selector))
+        except TimeoutException:
+            raise AssertionError('Element is not visible or not clickable')
+
     def wait_for_element_visibility(self, selector, wait=None):
         """Wait some time until expected element will be visible on current page
 
@@ -150,37 +157,8 @@ class DriverCommands:
         wait = wait or self.wait_time
         try:
             WebDriverWait(self.driver, wait).until_not(EC.visibility_of_element_located(selector))
-            return True
         except (TimeoutException, NoSuchElementException):
             return False
-
-    def wait_for_alert_not_visibility(self, wait=None):
-        """ Wait some time until page alert is not visible on page
-            :param wait: time to wait
-        """
-        wait = wait or self.wait_time
-        try:
-            WebDriverWait(self.driver, wait).until_not(EC.alert_is_present())
-            return True
-        except TimeoutException:
-            self.log.logger('INFO', 'Alert still presented')
-            return False
-
-    def wait_for_presence_of_element_located(self, selector, wait=None):
-        """
-        Wait some time for element presence in DOM
-
-            :param selector: element to wait for
-            :param wait: time to wait
-            :return: element
-        """
-        wait = wait or self.wait_time
-        try:
-            presence_of_element = WebDriverWait(self.driver, wait).until(
-                EC.presence_of_element_located(selector))
-            return presence_of_element
-        except (TimeoutException, NoSuchElementException):
-            raise AssertionError('Timeout, elemenent is not presented')
 
     def wait_for_expected_text(self, selector, expected_text, wait=None):
         """Wait some time until expected text will be visible on current page
@@ -213,21 +191,12 @@ class DriverCommands:
             self.log.logger('INFO', 'Any alert presented')
             return False
 
-    def wait_for_alert_accept(self, wait=None):
-        """ Wait for alert and accept if presented
-        :param wait: time to wait for alert
-        """
-        wait = wait or self.wait_time
-        try:
-            WebDriverWait(self.driver, wait).until(EC.alert_is_present())
-            alert = self.driver.switch_to.alert
-            self.log.logger('INFO', 'Alert text: %s\n' % alert.text)
-            alert.accept()
-            self.log.logger('INFO', "Alert has been accepted")
-            return True
-        except TimeoutException:
-            self.log.logger('WARNING', "No alert shown this time")
-            return False
+    @staticmethod
+    def wait(seconds):
+        time.sleep(seconds)
+
+    def open_url(self, url):
+        self.driver.get(url)
 
     def get_screenshot_file(self, driver, file_name):
         """
@@ -243,6 +212,3 @@ class DriverCommands:
         except NoSuchWindowException:
             self.log.logger('ERROR', 'Browser unable to get a screenshot')
 
-    @staticmethod
-    def wait(seconds):
-        time.sleep(seconds)
