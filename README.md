@@ -15,6 +15,15 @@ If you correctly setup your test environment, test suite should be ready to laun
 * Open command line and navigate to path/to/test/directroy
 * Now type command: nosetests --with-html --nocapture --nologcapture --with-xunit
 
+If you want to use other browser (default Chrome), you should edit config file.
+Open file path/to/your/repository/configuration/config.json in any text editor and edit first line:
+ 
+    replace:
+    "BROWSER": "CHROME"
+    on:
+    "BROWSER": "FF"
+
+Available browsers: CHROME, FF, OPERA, EDGE, IE, SAFARI. - remeber that you have to have properly configured selenium browser driver!!!
 TEST RESULTS:
 Nosetests framework generates simple html test report. Test report file 'nosetests.html' is stored in main directory.
 Besides nosetests.xml file is also generated and can be used for test reporting by Jenkins or any other CI tool (read more about Jenkins test report analyzer plugin here: https://wiki.jenkins-ci.org/display/JENKINS/Test+Results+Analyzer+Plugin )
