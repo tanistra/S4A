@@ -1,8 +1,8 @@
 from lib.driverCommands import DriverCommands
 from selenium.webdriver.common.by import By
 
-class CheckoutPage(DriverCommands):
 
+class CheckoutPage(DriverCommands):
     # LOCATORS
     # biling address
     first_name_loc = (By.ID, 'BillingNewAddress_FirstName')
@@ -140,13 +140,13 @@ class CheckoutPage(DriverCommands):
         self.payment_method_continue_btn_click()
 
     # payment info actions
-    def select_credit_card_type(self, type):
-        self.select_dd_element(self.credit_card_type_dd_loc, type)
-        self.log.logger('INFO', 'Credit card type selected: %s' % type)
+    def select_credit_card_type(self, card_type):
+        self.select_dd_element(self.credit_card_type_dd_loc, card_type)
+        self.log.logger('INFO', 'Credit card type selected: %s' % card_type)
 
     def cardholder_fill_in(self, name):
         self.fill_in(self.cardholder_name_loc, name)
-        self.log.logger('INFO', 'Cardholder name entered: %s' %name)
+        self.log.logger('INFO', 'Cardholder name entered: %s' % name)
 
     def card_number_fill_in(self, number):
         self.fill_in(self.card_number_loc, number)
@@ -168,7 +168,8 @@ class CheckoutPage(DriverCommands):
         self.click_element(self.payment_info_continue_btn_loc)
         self.log.logger('INFO', 'Continue button clicked')
 
-    def payment_credit_card_info_fill_in(self, card_type=None, cardholder=None, card_number=None, exp_month=None, exp_year=None, card_code=None):
+    def payment_credit_card_info_fill_in(self, card_type=None, cardholder=None, card_number=None, exp_month=None,
+                                         exp_year=None, card_code=None):
         if card_type is not None:
             self.select_credit_card_type(card_type)
         if cardholder is not None:
@@ -185,9 +186,8 @@ class CheckoutPage(DriverCommands):
 
     def confim_btn_click(self):
         self.click_element(self.confirm_btn_loc)
-        self.log.logger('INFO','Confirm order button clicked')
+        self.log.logger('INFO', 'Confirm order button clicked')
 
     def check_confirmation_info(self, expected):
         info = self.get_text_from_element(self.confirmation_info)
         assert info == expected, 'Wrong message, should be: %s, but is %s' % (expected, info)
-

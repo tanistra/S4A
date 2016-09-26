@@ -3,7 +3,6 @@ from selenium.webdriver.common.by import By
 
 
 class MainPage(DriverCommands):
-
     # LOCATORS
     # top menu locators
     register_link_loc = (By.LINK_TEXT, 'Register')
@@ -45,13 +44,11 @@ class MainPage(DriverCommands):
         assert self.get_page_title() == 'nopCommerce demo store. Cell phones'
         self.log.logger('INFO', 'Cell phone products page open')
 
-
-
     def check_logged_user(self, user_email):
         logged_user = self.get_text_from_element(self.account_link_loc)
-        assert logged_user == user_email, 'Wrong user account, should be %s, but logged is: %s' % (user_email, logged_user)
+        assert logged_user == user_email, 'Wrong user account, should be %s, but logged is: %s' % (
+            user_email, logged_user)
 
     def use_search(self, item):
         self.fill_in(self.search_loc, item, confirm=True)
-        self.log.logger('INFO','Searching item: %s' % item)
-
+        self.log.logger('INFO', 'Searching item: %s' % item)

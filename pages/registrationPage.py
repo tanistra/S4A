@@ -3,9 +3,8 @@ from selenium.webdriver.common.by import By
 
 
 class RegistrationPage(DriverCommands):
-
     # LOCATORS
-    gender_female_radio_loc = (By.ID,'gender-female')
+    gender_female_radio_loc = (By.ID, 'gender-female')
     gender_male_radio_loc = (By.ID, 'gender-male')
     first_name_field_loc = (By.ID, 'FirstName')
     first_name_required_loc = (By.XPATH, '//form/div/div[2]/div[1]/div[2]/div[2]/span[2]')
@@ -32,7 +31,7 @@ class RegistrationPage(DriverCommands):
             self.click_element(self.gender_female_radio_loc)
         else:
             self.log.logger('WARNING', 'Incorrect gender, can by only male or female')
-        self.log.logger('INFO','Selected gender: %s' % gender)
+        self.log.logger('INFO', 'Selected gender: %s' % gender)
 
     def first_name_fill_in(self, first_name):
         self.fill_in(self.first_name_field_loc, first_name)
@@ -128,4 +127,3 @@ class RegistrationPage(DriverCommands):
         success = 'Your registration completed'
         inf = self.get_text_from_element(self.success_info_loc)
         assert inf == success, 'Incorrect message, should be: %s, but is: %s ' % (success, inf)
-

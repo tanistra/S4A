@@ -27,7 +27,6 @@ class BaseTest(unittest.TestCase, Logger):
             DriverCommands(self.driver).get_screenshot_file(self.driver, name)
         DriverCommands(self.driver).open_url(self.CONFIG['BASE_URL'] + '/Logout')
 
-
     @classmethod
     def tearDownClass(cls):
         cls.driver.close()

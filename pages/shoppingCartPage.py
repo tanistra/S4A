@@ -3,8 +3,7 @@ from selenium.webdriver.common.by import By
 
 
 class ShoppingCartPage(DriverCommands):
-
-    #LOCATORS
+    # LOCATORS
     terms_conditions_loc = (By.ID, 'termsofservice')
     checkout_btn_loc = (By.ID, 'checkout')
 
@@ -16,4 +15,3 @@ class ShoppingCartPage(DriverCommands):
         self.click_element(self.checkout_btn_loc)
         assert self.get_page_title() == 'nopCommerce demo store. Checkout', 'Wrong page title'
         self.log.logger('INFO', 'Checkout button clicked')
-

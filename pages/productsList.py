@@ -3,7 +3,6 @@ from selenium.webdriver.common.by import By
 
 
 class ProductsList(DriverCommands):
-
     # LOCATORS
     product_title_loc = (By.CLASS_NAME, 'product-item')
 

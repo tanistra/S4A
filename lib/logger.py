@@ -46,4 +46,3 @@ def whoami():
     print('-' * 42 + '-' * len(name))
     print('*' * 20, name, '*' * 20)
     print('-' * 42 + '-' * len(name))
-    Logger.logger('INFO', name)

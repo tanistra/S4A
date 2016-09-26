@@ -63,6 +63,9 @@ class DriverCommands:
             element.submit()
 
     def move_to_element(self, selector):
+        """
+        move mouse coursor up to element
+        :param selector: selector for element"""
         element = self.find_element(selector)
         ActionChains(self.driver).move_to_element(element).perform()
 
@@ -197,6 +200,7 @@ class DriverCommands:
 
     def open_url(self, url):
         self.driver.get(url)
+        self.log.logger('INFO', 'Opened url: %s' % url)
 
     def get_screenshot_file(self, driver, file_name):
         """

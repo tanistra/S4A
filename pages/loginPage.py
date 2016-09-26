@@ -1,8 +1,8 @@
 from lib.driverCommands import DriverCommands
 from selenium.webdriver.common.by import By
 
-class LoginPage(DriverCommands):
 
+class LoginPage(DriverCommands):
     email_field_loc = (By.ID, 'Email')
     password_field_loc = (By.ID, 'Password')
     login_btn_loc = (By.CSS_SELECTOR, 'input.button-1.login-button')
@@ -25,4 +25,3 @@ class LoginPage(DriverCommands):
         if password is not None:
             self.fill_in(self.password_field_loc, password)
         self.login_btn_click()
-

@@ -13,6 +13,7 @@ from faker import Factory
 class ShoppingTestSuite(BaseTest):
 
     # TEST DATA
+    # **********************************************************
     f = Factory.create()
     name = f.first_name_female()
     last_name = f.last_name_female()
@@ -29,6 +30,7 @@ class ShoppingTestSuite(BaseTest):
     exp_month = f.credit_card_expire(date_format="%m")
     exp_year = f.credit_card_expire(end='+5y', date_format='%Y')
     card_code = f.credit_card_security_code(card_type.lower())
+    # **********************************************************
 
     def setUp(self):
         BaseTest.setUp(self)
@@ -43,7 +45,8 @@ class ShoppingTestSuite(BaseTest):
         whoami()
         self.main_page.register_tab_click()
         reg_page = RegistrationPage(self.driver)
-        reg_page.register_user(gender='female', f_name=self.name, l_name=self.last_name, email=self.email, password=self.password, conf_pass=self.password)
+        reg_page.register_user(gender='female', f_name=self.name, l_name=self.last_name, email=self.email,
+                               password=self.password, conf_pass=self.password)
         reg_page.check_registration_success()
         self.testResult = True
 
@@ -58,15 +61,20 @@ class ShoppingTestSuite(BaseTest):
         self.testResult = True
 
     def test_03_checkout_order(self):
+        whoami()
         self.main_page.log_in_tab_click()
         self.login_page.log_in_to_shop(email=self.email, password=self.password)
         self.main_page.shopping_cart_tab_click()
         self.cart.confirm_terms_and_conditions()
         self.cart.checkout_button_click()
-        self.checkout.biling_data_fill_in(f_name=self.name, l_name=self.last_name, email=self.email, country='Poland', city=self.city, address1=self.address1, zip_code=self.zip_code, phone=self.phone )
+        self.checkout.biling_data_fill_in(f_name=self.name, l_name=self.last_name, email=self.email, country='Poland',
+                                          city=self.city, address1=self.address1, zip_code=self.zip_code,
+                                          phone=self.phone)
         self.checkout.select_shipping_method(None)
-        self.checkout.select_payment_method('credit card')
-        self.checkout.payment_credit_card_info_fill_in(card_type=self.card_type, cardholder=self.cardholder, card_number=self.card_number, exp_month=self.exp_month, exp_year=self.exp_year, card_code=self.card_code)
+        self.checkout.select_payment_method(method='credit card')
+        self.checkout.payment_credit_card_info_fill_in(card_type=self.card_type, cardholder=self.cardholder,
+                                                       card_number=self.card_number, exp_month=self.exp_month,
+                                                       exp_year=self.exp_year, card_code=self.card_code)
         self.checkout.confim_btn_click()
         self.checkout.check_confirmation_info('Your order has been successfully processed!')
         self.testResult = True
