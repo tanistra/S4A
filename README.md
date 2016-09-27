@@ -9,7 +9,10 @@ To setup your environment you should:
 * Add installed python to your system environment 
 * Install all required python libraries: selenium, faker, nose, fake-factory, nose-htmloutput.
 
-** The main directory of the test project contains requirements.txt file. If you want to install all required python libraries, type in commnad line: pip3 install -r requirements.txt
+** The main directory of the test project contains requirements.txt file. If you want to install all required python libraries, type in commnad line:
+ 
+ pip3 install -r requirements.txt
+ 
 * Download and add to the system environment chromedriver or other browser driver which you want to use for testing - project supports all browsers (tested only Firefox and Chrome - https://sites.google.com/a/chromium.org/chromedriver/downloads
 
 If you correctly setup your test environment, test suite should be ready to launch:
