@@ -26,5 +26,8 @@ Open file path/to/your/repository/configuration/config.json in any text editor a
 Available browsers: CHROME, FF, OPERA, EDGE, IE, SAFARI. - remeber that you have to have properly configured selenium browser driver!!!
 
 TEST RESULTS:
+
 Nosetests framework generates simple html test report. Test report file 'nosetests.html' is stored in main directory.
 Besides nosetests.xml file is also generated and can be used for test reporting by Jenkins or any other CI tool (read more about Jenkins test report analyzer plugin here: https://wiki.jenkins-ci.org/display/JENKINS/Test+Results+Analyzer+Plugin )
+
+If any of test cases failed, test script automatically capture a screenshot. Screenshots are stored in your/path/to/project/S4A/screenshots/test_name.png.
